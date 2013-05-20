@@ -35,6 +35,8 @@ last_neck_h = 30; /* this is a guess */
 engine_housing_r = 101 / 12.0;
 engine_housing_h = 4 * engine_housing_r;
 
+cmd_module_h = 15; /* a guess */
+
 $fn=40;
 
 module stage_one()
@@ -83,6 +85,15 @@ module top_neck_down()
 	}
 }
 
+module cmd_module()
+{
+	difference() {
+		cylinder(h = cmd_module_h, r1 = capsule_r, r2 = capsule_r, center = true);
+		cylinder(h = cmd_module_h + 1, r1 = capsule_r - 1, r2 = capsule_r - 1,
+			center = true);
+	}
+}
+	
 module capsule()
 {
 	difference() {
@@ -154,8 +165,11 @@ module saturn_v()
 				stage_three();
 				translate(v = [0, 0, stage_three_h / 2.0 + last_neck_h / 2.0 - 0.5]) {
 					top_neck_down();
-					translate(v = [0, 0, last_neck_h / 2.0 + capsule_h / 2.0 - 0.25]) {
-						capsule();
+					translate(v = [0, 0, last_neck_h / 2.0 + cmd_module_h / 2.0 - 0.25]) {
+						cmd_module();
+						translate(v = [0, 0, cmd_module_h / 2.0 + capsule_h / 2.0 - 0.25]) {
+							capsule();
+						}
 					}
 				}
 			}
